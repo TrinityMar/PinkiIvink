@@ -1,8 +1,11 @@
 extends CharacterBody2D
 
-const SPEED = 10
+const SPEED = 25
 
-# Called when the node enters the scene tree for the first time.
+@onready var ray_cast_left: RayCast2D = $RayCast2DLeft
+@onready var ray_cast_right: RayCast2D = $RayCast2DRight
+var direction = 1
+
 func _ready() -> void:
 	add_to_group("Enemy")
 
@@ -10,18 +13,15 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
 	move(_delta)
-	takc()
 
-func takc():
-	if $RayCast2DLeft.is_colliding():
-		print("sosal")
-	elif $RayCast2DRight.is_colliding():
-		print("sosal")
 
 func move(_delta):
-	
 	if is_on_floor():
-		velocity.x = SPEED
-		print("gg")
-	
+		if ray_cast_left.is_colliding():
+			scale.x = 1
+		else:
+			scale.x = -1
+			
+		velocity.x += direction * SPEED * _delta
 	move_and_slide()
+	
